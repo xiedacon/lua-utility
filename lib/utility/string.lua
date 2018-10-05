@@ -2,6 +2,10 @@
 
 local String = {}
 
+function String.endsWith(s, subfix)
+    return string.sub(s, #s - #subfix + 1, #s) == subfix
+end
+
 function String.replace(s, str1, str2)
     return table.concat(String.split(s, str1), str2)
 end
@@ -40,7 +44,7 @@ function String.split(s, delimiter)
     local current = 1
     s = s .. delimiter
     while(current < #s) do
-        local from, to = string.find(s, delimiter, current)
+        local from, to = string.find(s, delimiter, current, true)
         
         arr[i] = string.sub(s, current, from - 1)
         current = to + 1
