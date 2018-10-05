@@ -285,4 +285,29 @@ function Array:unshift(...)
     return #self
 end
 
+function Array:diff(arr)
+    local place_holder = "__array_diff_place_holder__"
+    local l = self:slice()
+    local r = Array()
+
+    local map = {}
+    for i, v in ipairs(l) do
+        if not map[v] then map[v] = {} end
+
+        table.insert(map[v], i)
+    end
+
+    for _, v in ipairs(arr) do
+        if map[v] then
+            for _, i in ipairs(map[v]) do
+                l[i] = place_holder
+            end
+        else
+            table.insert(r, v)
+        end
+    end
+
+    return l:filter(function(i) return i ~= place_holder end), r
+end
+
 return Array
