@@ -19,6 +19,8 @@ function utility.try(fns, catch)
 
         if err then return catch(err) end
     end
+
+    return res
 end
 
 function utility.noop() end
