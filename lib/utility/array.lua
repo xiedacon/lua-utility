@@ -100,8 +100,8 @@ function Array:filter(fn)
     return out
 end
 
-function Array:find(fn)
-    return self[self:findIndex(fn)]
+function Array.find(self, fn)
+    return self[Array.findIndex(self, fn)]
 end
 
 function Array:findIndex(fn)
@@ -114,8 +114,8 @@ end
 
 Array.forEach = Array.each
 
-function Array:includes(v, from)
-    return self:indexOf(v, from) > 0
+function Array.includes(self, v, from)
+    return Array.indexOf(self, v, from) > 0
 end
 
 function Array:indexOf(v, from)
@@ -285,9 +285,9 @@ function Array:unshift(...)
     return #self
 end
 
-function Array:diff(arr)
+function Array.diff(self, arr)
     local place_holder = "__array_diff_place_holder__"
-    local l = self:slice()
+    local l = Array.slice(self)
     local r = Array()
 
     local map = {}
