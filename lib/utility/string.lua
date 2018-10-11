@@ -1,5 +1,7 @@
 -- Copyright (c) 2018, xiedacon.
 
+local Array = require "utility.array"
+
 local String = {}
 
 function String.endsWith(s, subfix)
@@ -30,11 +32,11 @@ function String.slice(s, from, to)
 end
 
 function String.split(s, delimiter)
-    local arr = {}
+    local arr = Array()
 
     if delimiter == "" then
         for i = 1, #s do
-            arr[i] = string.sub(s, i, i)
+            arr:push(string.sub(s, i, i))
         end
 
         return arr
@@ -46,7 +48,7 @@ function String.split(s, delimiter)
     while(current < #s) do
         local from, to = string.find(s, delimiter, current, true)
         
-        arr[i] = string.sub(s, current, from - 1)
+        arr:push(string.sub(s, current, from - 1))
         current = to + 1
         i = i + 1
     end

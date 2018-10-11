@@ -1,5 +1,6 @@
 -- Copyright (c) 2018, xiedacon.
 
+local Array = require "utility.array"
 local String = require "utility.string"
 
 local Object = {}
@@ -85,20 +86,20 @@ function Object.set(obj, path, value)
 end
 
 function Object.keys(obj)
-    local keys = {}
+    local keys = Array()
 
     for k, v in pairs(obj) do
-        table.insert(keys, k)
+        keys:push(k)
     end
 
     return keys
 end
 
 function Object.values(obj)
-    local values = {}
+    local values = Array()
 
     for k, v in pairs(obj) do
-        table.insert(values, v)
+        values:push(v)
     end
 
     return values
