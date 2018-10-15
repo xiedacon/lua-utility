@@ -42,15 +42,17 @@ function String.split(s, delimiter)
         return arr
     end
 
-    local i = 1
     local current = 1
     s = s .. delimiter
     while(current < #s) do
         local from, to = string.find(s, delimiter, current, true)
+        if to == nil then
+            from = #s
+            to = #s
+        end
         
         arr:push(string.sub(s, current, from - 1))
         current = to + 1
-        i = i + 1
     end
 
     return arr
