@@ -310,4 +310,20 @@ function Array.diff(self, arr)
     return l:filter(function(i) return i ~= place_holder end), r
 end
 
+function Array.union(...)
+    local out = Array()
+
+    local map = {}
+    for _, arr in ipairs({...}) do
+        for _, v in ipairs(arr) do
+            if not map[v] then
+                map[v] = true
+                table.insert(out, v)
+            end
+        end
+    end
+
+    return out
+end
+
 return Array

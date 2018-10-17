@@ -38,6 +38,7 @@
     * toString
     * unshift
     * diff
+    * union
 * [Object](#Object)
     * assign
     * pick
@@ -136,6 +137,7 @@ arr:splice(0, 1)
 arr:toString()
 arr:unshift(1)
 arr:diff(arr1) -- arr_only, arr1_only
+arr:union(arr1, arr2) -- arr U arr1 U arr2
 ```
 
 #### Object
