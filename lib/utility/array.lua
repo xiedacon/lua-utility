@@ -23,20 +23,18 @@ setmetatable(Array, {
 })
 
 function parse_from_to(from, to, len)
-    from = from or 1
-    if from < 0 then from = len + from + 1 end
-    if from < 0 then from = 1 end
+    from = from or 0
+    if from < 0 then from = len + from end
+    if from < 0 then from = 0 end
 
-    to = to or (len + 1)
-    if to < 1 then 
+    to = to or len
+    if to < 0 then 
         to = len + to
-    elseif to > len + 1 then
+    elseif to > len then
         to = len
-    else
-        to = to - 1
     end
-
-    return from, to
+    
+    return from + 1, to
 end
 
 function Array.from(arr)
@@ -61,7 +59,7 @@ end
 
 function Array:each(fn)
     for i = 1, #self do
-        fn(self[i], i, self)
+        fn(self[i], i - 1, self)
     end
 end
 
@@ -71,7 +69,7 @@ function Array:every(fn)
     local len = #self
 
     while(out and i <= len) do
-        out = fn(self[i], i, self)
+        out = fn(self[i], i - 1, self)
         i = i + 1
     end
 
@@ -92,7 +90,7 @@ end
 function Array:filter(fn)
     local out = Array()
     for i = 1, #self do
-        if fn(self[i], i ,self) then
+        if fn(self[i], i - 1, self) then
             table.insert(out, self[i])
         end
     end
@@ -100,14 +98,14 @@ function Array:filter(fn)
     return out
 end
 
-function Array.find(self, fn)
-    return self[Array.findIndex(self, fn)]
+function Array:find(fn)
+    return self[Array.findIndex(self, fn) + 1]
 end
 
 function Array:findIndex(fn)
     for i = 1, #self do 
-        if fn(self[i], i, self) then
-            return i
+        if fn(self[i], i - 1, self) then
+            return i - 1
         end
     end
 end
@@ -115,15 +113,15 @@ end
 Array.forEach = Array.each
 
 function Array.includes(self, v, from)
-    return Array.indexOf(self, v, from) > 0
+    return Array.indexOf(self, v, from) >= 0
 end
 
 function Array:indexOf(v, from)
-    from = parse_from_to(from, #self + 1, #self)
+    from, to = parse_from_to(from, #self, #self)
 
-    for i = from, #self do 
+    for i = from, to do 
         if v == self[i] then
-            return i
+            return i - 1
         end
     end
 
@@ -135,11 +133,11 @@ function Array:join(delimiter)
 end
 
 function Array:lastIndexOf(v, to)
-    local from, to = parse_from_to(1, (to or #self) + 1, #self)
+    local from, to = parse_from_to(0, to, #self)
 
-    while(to > 0) do
+    while(to > from) do
         if v == self[to] then
-            return to
+            return to - 1
         end
 
         to = to - 1
@@ -158,7 +156,7 @@ function Array:map(fn)
 
     local out = Array()
     for i = 1, #self do
-        table.insert(out, fn(self[i], i, self))
+        table.insert(out, fn(self[i], i - 1, self))
     end
 
     return out
@@ -179,7 +177,7 @@ end
 function Array:reduce(fn, default)
     local out = default
     for i = 1, #self do
-        out = fn(out, self[i], i, self)
+        out = fn(out, self[i], i - 1, self)
     end
 
     return out
@@ -190,7 +188,7 @@ function Array:reduceRight(fn, default)
     local i = #self
 
     while(i > 0) do
-        out = fn(out, self[i], i, self)
+        out = fn(out, self[i], i - 1, self)
         i = i - 1
     end
 
@@ -236,7 +234,7 @@ end
 
 function Array:some(fn)
     for i = 1, #self do
-        if fn(self[i], i ,self) then
+        if fn(self[i], i - 1, self) then
             return true
         end
     end
@@ -252,7 +250,7 @@ end
 function Array:splice(from, count, ...)
     local out = Array()
 
-    from, to = parse_from_to(from, #self + 1, #self)
+    from, to = parse_from_to(from, #self, #self)
     if count and count >= 0 then
         to = from + count - 1
         if to > #self then to = #self end

@@ -15,20 +15,18 @@ end
 function String.slice(s, from, to)
     local len = #s
 
-    from = from or 1
-    if from < 0 then from = len + from + 1 end
-    if from < 0 then from = 1 end
+    from = from or 0
+    if from < 0 then from = len + from end
+    if from < 0 then from = 0 end
 
-    to = to or (len + 1)
-    if to < 1 then 
+    to = to or len
+    if to < 0 then
         to = len + to
-    elseif to > len + 1 then
+    elseif to > len then
         to = len
-    else
-        to = to - 1
     end
 
-    return string.sub(s, from, to)
+    return string.sub(s, from + 1, to)
 end
 
 function String.split(s, delimiter)
