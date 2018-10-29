@@ -42,7 +42,7 @@ function String.split(s, delimiter)
 
     local current = 1
     s = s .. delimiter
-    while(current < #s) do
+    while(current <= #s) do
         local from, to = string.find(s, delimiter, current, true)
         if to == nil then
             from = #s
