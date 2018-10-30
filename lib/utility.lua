@@ -2,6 +2,7 @@
 
 local utility = {
     array = require("utility.array"),
+    func = require("utility.function"),
     object = require("utility.object"),
     string = require("utility.string")
 }

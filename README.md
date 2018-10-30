@@ -39,6 +39,10 @@
     * unshift
     * diff
     * union
+* [Function](#Function)
+    * apply
+    * bind
+    * call
 * [Object](#Object)
     * assign
     * pick
@@ -138,6 +142,25 @@ arr:toString()
 arr:unshift(1)
 arr:diff(arr1) -- arr_only, arr1_only
 arr:union(arr1, arr2) -- arr U arr1 U arr2
+```
+
+#### Function
+
+```lua
+local Function require "utility.function"
+
+local func = Function(function(arg1, arg2, arg3)
+    print(arg1 .. " " .. arg2 .. " " .. arg3)
+end)
+
+-- 1 2 3
+func(1, 2, 3)
+-- 1 2 3
+func:apply({ 1, 2, 3 })
+-- 1 2 4
+func:bind(1, 2)(2, 3, 4)
+-- 1 2 3
+func:call(1, 2, 3)
 ```
 
 #### Object
