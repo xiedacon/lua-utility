@@ -108,6 +108,8 @@ function Array:findIndex(fn)
             return i - 1
         end
     end
+
+    return -1
 end
 
 Array.forEach = Array.each
