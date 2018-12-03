@@ -105,4 +105,14 @@ function Object.values(obj)
     return values
 end
 
+function Object.entries(obj)
+    local entries = Array()
+
+    for k, v in pairs(obj) do
+        entries:push(Array({ k, v }))
+    end
+
+    return entries
+end
+
 return Object

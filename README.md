@@ -229,6 +229,13 @@ Object.values({
     b = 2,
     c = 3
 })
+
+-- { { "a", 1 }, { "b", 2 }, { "c", 3 } }
+Object.entries({
+    a = 1,
+    b = 2,
+    c = 3
+})
 ```
 
 #### String
