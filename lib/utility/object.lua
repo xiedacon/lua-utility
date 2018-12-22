@@ -3,6 +3,11 @@
 local Array = require "utility.array"
 local String = require "utility.string"
 
+local ok, table_new = pcall(require, "table.new")
+if not ok or type(table_new) ~= "function" then
+    table_new = function() return {} end
+end
+
 local Object = {}
 
 function Object.assign(...)
@@ -23,8 +28,8 @@ function Object.assign(...)
 end
 
 function Object.pick(obj, keys)
-    local out = {}
-    local keyMap = {}
+    local out = table_new(0, #keys)
+    local keyMap = table_new(0, #keys)
 
     for _, k in ipairs(keys) do
         keyMap[k] = true
@@ -40,8 +45,8 @@ function Object.pick(obj, keys)
 end
 
 function Object.omit(obj, keys)
-    local out = {}
-    local keyMap = {}
+    local out = table_new(0, 10)
+    local keyMap = table_new(0, #keys)
 
     for _, k in ipairs(keys) do
         keyMap[k] = true
@@ -89,7 +94,7 @@ function Object.keys(obj)
     local keys = Array()
 
     for k, v in pairs(obj) do
-        keys:push(k)
+        keys[#keys + 1] = k
     end
 
     return keys
@@ -99,7 +104,7 @@ function Object.values(obj)
     local values = Array()
 
     for k, v in pairs(obj) do
-        values:push(v)
+        values[#values + 1] = v
     end
 
     return values
@@ -109,7 +114,7 @@ function Object.entries(obj)
     local entries = Array()
 
     for k, v in pairs(obj) do
-        entries:push(Array({ k, v }))
+        entries[#entries + 1] = Array({ k, v })
     end
 
     return entries

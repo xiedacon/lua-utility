@@ -2,21 +2,28 @@
 
 local cjson = require "cjson.safe"
 
-local Array = {}
+local ok, table_new = pcall(require, "table.new")
+if not ok or type(table_new) ~= "function" then
+    table_new = function() return {} end
+end
+
+local Array = {
+    default_size = 10
+}
+
+local proto = {
+    __index = Array,
+    __tostring = function(self)
+        return self:toString()
+    end
+}
 
 setmetatable(Array, {
     __call = function(self, arr)
-        if not arr then arr = {} end
-        if type(arr) ~= "table" then
-            return nil, "arr should be table"
-        end
+        if type(arr) == "nil" or type(arr) == "number" then arr = table_new(arr or Array.default_size, 0) end
+        if type(arr) ~= "table" then return nil, "arr should be table" end
         
-        setmetatable(arr, {
-            __index = self,
-            __tostring = function(self)
-                return self:toString()
-            end
-        })
+        setmetatable(arr, proto)
 
         return arr
     end
@@ -46,11 +53,13 @@ function Array.from(arr)
 end
 
 function Array.concat(...)
-    local out = Array()
+    local out = Array(#{...} * Array.default_size)
 
+    local i = 1
     for _, arr in ipairs({...}) do
-        for i = 1, #arr do
-            table.insert(out, arr[i])
+        for _, v in ipairs(arr) do
+            out[i] = v
+            i = i + 1
         end
     end
 
@@ -58,8 +67,8 @@ function Array.concat(...)
 end
 
 function Array:each(fn)
-    for i = 1, #self do
-        fn(self[i], i - 1, self)
+    for i, v in ipairs(self) do
+        fn(v, i - 1, self)
     end
 end
 
@@ -88,10 +97,13 @@ function Array:fill(v, from, to)
 end
 
 function Array:filter(fn)
-    local out = Array()
-    for i = 1, #self do
-        if fn(self[i], i - 1, self) then
-            table.insert(out, self[i])
+    local out = Array(#self)
+
+    local i = 1
+    for j, v in ipairs(self) do
+        if fn(v, j - 1, self) then
+            out[i] = v
+            i = i + 1
         end
     end
 
@@ -103,8 +115,8 @@ function Array:find(fn)
 end
 
 function Array:findIndex(fn)
-    for i = 1, #self do 
-        if fn(self[i], i - 1, self) then
+    for i, v in ipairs(self) do 
+        if fn(v, i - 1, self) then
             return i - 1
         end
     end
@@ -137,7 +149,7 @@ end
 function Array:lastIndexOf(v, to)
     local from, to = parse_from_to(0, to, #self)
 
-    while(to > from) do
+    while(to >= from) do
         if v == self[to] then
             return to - 1
         end
@@ -156,9 +168,9 @@ function Array:map(fn)
         end
     end
 
-    local out = Array()
-    for i = 1, #self do
-        table.insert(out, fn(self[i], i - 1, self))
+    local out = Array(#self)
+    for i, v in ipairs(self) do
+        out[i] = fn(v, i - 1, self)
     end
 
     return out
@@ -169,8 +181,10 @@ function Array:pop()
 end
 
 function Array:push(...)
+    local i = #self + 1
     for _, v in ipairs({...}) do
-        table.insert(self, v)
+        self[i] = v
+        i = i + 1
     end
 
     return #self
@@ -178,8 +192,8 @@ end
 
 function Array:reduce(fn, default)
     local out = default
-    for i = 1, #self do
-        out = fn(out, self[i], i - 1, self)
+    for i, v in ipairs(self) do
+        out = fn(out, v, i - 1, self)
     end
 
     return out
@@ -222,21 +236,21 @@ function Array:shift()
 end
 
 function Array:slice(from, to)
-    local out = Array()
-
     from, to = parse_from_to(from, to, #self)
-    if from > to then return out end
-
-    for i = from, to do
-        table.insert(out, self[i])
+    if from > to then return Array() end
+    
+    local total = to - from + 1
+    local out = Array(total)
+    for i = 1, total do
+        out[i] = self[i + from - 1]
     end
 
     return out
 end
 
 function Array:some(fn)
-    for i = 1, #self do
-        if fn(self[i], i - 1, self) then
+    for i, v in ipairs(self) do
+        if fn(v, i - 1, self) then
             return true
         end
     end
@@ -250,22 +264,46 @@ function Array:sort(fn)
 end
 
 function Array:splice(from, count, ...)
-    local out = Array()
+    if from == nil then return Array() end
 
     from, to = parse_from_to(from, #self, #self)
-    if count and count >= 0 then
+    if type(count) == "number" and count >= 0 then
         to = from + count - 1
         if to > #self then to = #self end
     end
-
-    for i = from, to do
-        table.insert(out, table.remove(self, from))
+    
+    local size = #self
+    local total = to - from + 1
+    local out = Array(total)
+    for i = 1, total do
+        out[i] = self[i + from - 1]
+        self[i + from - 1] = nil
     end
 
-    local i = #({...})
-    while(i > 0) do
-        table.insert(self, from, ({...})[i])
-        i = i - 1
+    local x = #({...}) - total
+    if x > 0 then
+        local step
+        for i = to + 1, size do
+            step = size + 1 - i + to
+            self[step + x] = self[step]
+            self[step] = nil
+        end
+    elseif x < 0 then
+        local step
+        for i = to + 1, size do
+            step = i
+            self[step + x] = self[step]
+            self[step] = nil
+        end
+    end
+
+    if type(count) ~= "number" and count ~= nil then
+        self[from] = count
+        from = from + 1
+    end
+
+    for i = from + 1, from + #({...}) do
+        self[i - 1] = ({...})[i - from]
     end
 
     return out
@@ -288,13 +326,15 @@ end
 function Array.diff(self, arr)
     local place_holder = "__array_diff_place_holder__"
     local l = Array.slice(self)
-    local r = Array()
+    local r = Array(#arr)
 
-    local map = {}
+    local map = table_new(0, 10)
     for i, v in ipairs(l) do
-        if not map[v] then map[v] = {} end
-
-        table.insert(map[v], i)
+        if map[v] then
+            map[v][#map[v] + 1] = i
+        else
+            map[v] = { i }
+        end
     end
 
     for _, v in ipairs(arr) do
@@ -303,7 +343,7 @@ function Array.diff(self, arr)
                 l[i] = place_holder
             end
         else
-            table.insert(r, v)
+            r[#r + 1] = v
         end
     end
 
@@ -313,12 +353,12 @@ end
 function Array.union(...)
     local out = Array()
 
-    local map = {}
+    local map = table_new(0, 10)
     for _, arr in ipairs({...}) do
         for _, v in ipairs(arr) do
             if not map[v] then
                 map[v] = true
-                table.insert(out, v)
+                out[#out + 1] = v
             end
         end
     end
