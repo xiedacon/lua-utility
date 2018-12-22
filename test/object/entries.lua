@@ -2,7 +2,8 @@
 
 test(
     Object.entries({ a = "aa", b = "bb", c = "cc" }),
-    { { "b", "bb" }, { "a", "aa" }, { "c", "cc" } }
+    { { "a", "aa" }, { "b", "bb" }, { "c", "cc" } },
+    true -- pairs() order by inner hash, it's hard to predict, so skip it
 )
 
 test(

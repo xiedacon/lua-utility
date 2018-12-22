@@ -2,8 +2,8 @@
 
 test(
     Object.keys({ a = "aa", b = "bb", c = "cc" }),
-    { "b", "a", "c" },
-    true
+    { "a", "b", "c" },
+    true -- pairs() order by inner hash, it's hard to predict, so skip it
 )
 
 test(
