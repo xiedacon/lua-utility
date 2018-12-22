@@ -26,7 +26,7 @@ function Function:bind(...)
     local args = Array({...})
 
     return Function(function(...)
-        args = args:concat(Array({...}):slice(#args))
+        args = args:concat({...})
 
         return Function.apply(fn, args)
     end)
