@@ -9,7 +9,11 @@ function String.endsWith(s, subfix)
 end
 
 function String.replace(s, str1, str2)
-    return table.concat(String.split(s, str1), str2)
+    s = table.concat(String.split(s, str1), str2)
+
+    if str1 == "" then s = table.concat({ str2, s, str2 }, "") end
+
+    return s
 end
 
 function String.slice(s, from, to)
