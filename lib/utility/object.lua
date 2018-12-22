@@ -8,6 +8,17 @@ if not ok or type(table_new) ~= "function" then
     table_new = function() return {} end
 end
 
+local ok, table_clear = pcall(require, "table.clear")
+if not ok or type(table_new) ~= "function" then
+    table_clear = function(tab)
+        for k, _ in pairs(tab) do
+            tab[k] = nil
+        end
+
+        return tab
+    end
+end
+
 local Object = {}
 
 function Object.assign(...)
@@ -118,6 +129,38 @@ function Object.entries(obj)
     end
 
     return entries
+end
+
+function Object.freeze(obj)
+    if type(obj) ~= "table" then return obj end
+
+    local meta = {
+        __index = {},
+        __newindex = function() end,
+        __metatable = "table is frozen"
+    }
+
+    for k, v in pairs(obj) do
+        meta.__index[k] = Object.freeze(v)
+    end
+
+    local old_meta = getmetatable(obj)
+    if old_meta == "table is frozen" then return obj end
+
+    if type(old_meta) == "table" then
+        if type(old_meta.__index) == "table" then
+            for k, v in pairs(old_meta.__index) do
+                old_meta.__index[k] = Object.freeze(v)
+            end
+        end
+
+        setmetatable(meta.__index, old_meta)
+    end
+
+    table_clear(obj)
+    setmetatable(obj, meta)
+
+    return obj
 end
 
 return Object

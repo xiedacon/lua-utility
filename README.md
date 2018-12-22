@@ -46,6 +46,7 @@
 * [Object](#Object)
     * assign
     * entries
+    * freeze
     * get
     * keys
     * omit
@@ -237,6 +238,12 @@ Object.entries({
     b = 2,
     c = 3
 })
+
+local obj = { a = "a" }
+Object.freeze(obj) -- after this, obj is not editable
+
+obj.a = "b" -- { a = "a" }
+obj.b = "b" -- { a = "a" }
 ```
 
 #### String
