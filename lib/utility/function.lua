@@ -3,6 +3,11 @@
 local Array = require "utility.array"
 local Object = require "utility.object"
 
+local ok, table_new = pcall(require, "table.new")
+if not ok or type(table_new) ~= "function" then
+    table_new = function() return {} end
+end
+
 local Function = {}
 
 setmetatable(Function, {
@@ -40,7 +45,7 @@ function Function:call(...)
 end
 
 local function build_func_body(n)
-    local args = table.new(n, 0)
+    local args = table_new(n, 0)
 
     for i = 1, n do
         args[i] = "args[" .. i .. "]"
@@ -50,7 +55,7 @@ local function build_func_body(n)
 end
 
 local pre_build = 20
-local func_bodys = table.new(pre_build, 0)
+local func_bodys = table_new(pre_build, 0)
 for i = 1, pre_build do
     func_bodys[i] = build_func_body(i - 1)
 end
