@@ -256,6 +256,15 @@ String.trimLeft("  test.lua  ") -- "test.lua  "
 String.trimRight("  test.lua  ") -- "  test.lua"
 ```
 
+## Tests
+
+```shell
+export LUA_PATH="/path/to/lua-utility/lib/?.lua;;"
+export LUA_CPATH="/path/to/lua-cjson/?.so;;"
+
+lua test.lua
+```
+
 ## License
 
 [MIT License](https://github.com/xiedacon/lua-utility/blob/master/LICENSE)
