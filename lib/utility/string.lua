@@ -2,7 +2,7 @@
 
 local Array = require "utility.array"
 
-local String = {}
+local String = { __type = "utility.string" }
 
 function String.endsWith(s, subfix)
     return string.sub(s, #s - #subfix + 1, #s) == subfix

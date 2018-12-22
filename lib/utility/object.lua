@@ -19,7 +19,7 @@ if not ok or type(table_new) ~= "function" then
     end
 end
 
-local Object = {}
+local Object = { __type = "utility.object" }
 
 function Object.assign(...)
     local out = ({...})[1]

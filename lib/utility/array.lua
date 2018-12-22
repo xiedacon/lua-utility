@@ -8,6 +8,7 @@ if not ok or type(table_new) ~= "function" then
 end
 
 local Array = {
+    __type = "utility.array",
     default_size = 10
 }
 
@@ -22,6 +23,7 @@ setmetatable(Array, {
     __call = function(self, arr)
         if type(arr) == "nil" or type(arr) == "number" then arr = table_new(arr or Array.default_size, 0) end
         if type(arr) ~= "table" then return nil, "arr should be table" end
+        if arr.__type == Array.__type then return arr end
         
         setmetatable(arr, proto)
 

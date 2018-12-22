@@ -8,11 +8,12 @@ if not ok or type(table_new) ~= "function" then
     table_new = function() return {} end
 end
 
-local Function = {}
+local Function = { __type = "utility.function" }
 
 setmetatable(Function, {
     __call = function(self, fn)
         if type(fn) ~= "function" then return nil, "fn should be a function" end
+        if fn.__type == Function.__type then return fn end
         local func = {}
 
         setmetatable(func, {
