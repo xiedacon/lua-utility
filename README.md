@@ -11,6 +11,7 @@
 * [Base](#Base)
     * try
     * noop
+    * once
 * [Array](#Array)
     * concat
     * diff
@@ -104,6 +105,9 @@ local res, err = utility.try({
 end)
 
 utility.noop() -- nothing happend
+utility.once(function()
+    -- only call once
+end)
 ```
 
 #### Array

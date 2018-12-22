@@ -27,4 +27,17 @@ end
 
 function utility.noop() end
 
+function utility.once(fn)
+    local done = false
+
+    return function(...)
+        if done then
+            return
+        else
+            done = true
+            return utility.func.apply(fn, {...})
+        end
+    end
+end
+
 return utility
