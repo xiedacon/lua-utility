@@ -12,14 +12,15 @@
     * try
     * noop
 * [Array](#Array)
-    * from
     * concat
+    * diff
     * each
     * every
     * fill
     * filter
     * find
     * findIndex
+    * from
     * includes
     * indexOf
     * join
@@ -36,20 +37,20 @@
     * sort
     * splice
     * toString
-    * unshift
-    * diff
     * union
+    * unshift
 * [Function](#Function)
     * apply
     * bind
     * call
 * [Object](#Object)
     * assign
-    * pick
-    * omit
+    * entries
     * get
-    * set
     * keys
+    * omit
+    * pick
+    * set
     * values
 * [String](#String)
     * endsWith
@@ -159,7 +160,7 @@ func(1, 2, 3)
 func:apply({ 1, 2, 3 })
 -- 1 2 4
 func:bind(1, 2)(2, 3, 4)
--- 1 2 3
+-- 1 2 2 3 4
 func:call(1, 2, 3)
 ```
 
