@@ -15,7 +15,7 @@ _G.test = function(v1, v2, skip)
 
     if not ok then
         print("Assert failed: \n"
-            .. "  except: " .. tostring(v2) .. "\n"
+            .. "  expect: " .. tostring(v2) .. "\n"
             .. "  accept: " .. tostring(v1) .. "\n")
     end
 end
