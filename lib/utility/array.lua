@@ -31,7 +31,7 @@ setmetatable(Array, {
     end
 })
 
-function parse_from_to(from, to, len)
+local function parse_from_to(from, to, len)
     from = from or 0
     if from < 0 then from = len + from end
     if from < 0 then from = 0 end
