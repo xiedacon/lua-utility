@@ -148,6 +148,12 @@ function Object.freeze(obj)
     if old_meta == "table is frozen" then return obj end
 
     if type(old_meta) == "table" then
+        for k, v in pairs(old_meta) do
+            if k ~= "__index" and k ~= "__newindex" then
+                meta[k] = v
+            end
+        end
+
         if type(old_meta.__index) == "table" then
             for k, v in pairs(old_meta.__index) do
                 old_meta.__index[k] = Object.freeze(v)
