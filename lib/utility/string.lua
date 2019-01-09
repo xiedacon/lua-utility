@@ -9,9 +9,15 @@ function String.endsWith(s, subfix)
 end
 
 function String.replace(s, str1, str2)
-    s = table.concat(String.split(s, str1), str2)
-
-    if str1 == "" then s = table.concat({ str2, s, str2 }, "") end
+    if type(str1) == "table" then
+        local handler = type(str2) == "function" and str2 or function(k) return table.concat({ "$", k }, "") end
+        for k, v in pairs(str1) do
+            s = table.concat(String.split(s, handler(k)), v)
+        end
+    else
+        s = table.concat(String.split(s, str1), str2)
+        if str1 == "" then s = table.concat({ str2, s, str2 }, "") end
+    end
 
     return s
 end
