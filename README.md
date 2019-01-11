@@ -258,6 +258,8 @@ local String = require "utility.string"
 String.endsWith("test.lua", ".lua") -- true
 String.endsWith("test.lua", ".lu") -- false
 String.replace("test.lua", ".", "-") -- "test-lua"
+String.replace("$a-$b", { a = "aaa", b = "bbb" }) -- "aaa-bbb"
+String.replace("${a}-${b}", { a = "aaa", b = "bbb" }, function(k) return "${" .. k .. "}" end) -- "aaa-bbb"
 String.slice("test.lua", 1, 5) -- test
 String.split("test.lua", ".") -- { "test", "lua" }
 String.startsWith("test.lua", "test") -- true
