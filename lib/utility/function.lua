@@ -12,8 +12,13 @@ local Function = { __type = "utility.function" }
 
 setmetatable(Function, {
     __call = function(self, fn)
-        if type(fn) ~= "function" then return nil, "fn should be a function" end
-        if fn.__type == Function.__type then return fn end
+        if type(fn) ~= "function" then
+            if type(fn) == "table" and fn.__type == Function.__type then
+                return fn
+            else
+                return nil, "fn should be a function"
+            end
+        end
         local func = {}
 
         setmetatable(func, {

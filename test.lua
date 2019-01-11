@@ -56,12 +56,14 @@ while(current <= #files) do
 
     local ok, fn = pcall(loadfile, file)
     if ok then
-        ok = pcall(fn)
+        ok, err = pcall(fn)
         if not ok then
             print("Failed to execute " .. name)
+            print(err)
         end
     else
         print("Failed to load " .. name)
+        print(fn)
     end
 
     current = to + 1
