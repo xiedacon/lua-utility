@@ -1,7 +1,7 @@
 -- Copyright (c) 2018, xiedacon.
 
 local utility = {
-    _VERSION = "0.2",
+    _VERSION = "0.3",
     array = require("utility.array"),
     func = require("utility.function"),
     object = require("utility.object"),
