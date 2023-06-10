@@ -63,6 +63,7 @@
     * trim
     * trimLeft
     * trimRight
+    * f
 
 #### Base
 
@@ -267,6 +268,7 @@ String.startsWith("test.lua", "est") -- false
 String.trim("  test.lua  ") -- "test.lua"
 String.trimLeft("  test.lua  ") -- "test.lua  "
 String.trimRight("  test.lua  ") -- "  test.lua"
+String.f"Output: {(function() return 'test' end)()}" -- "Output: test"
 ```
 
 ## Tests
