@@ -5,7 +5,7 @@ local String = require "utility.string"
 
 local ok, table_new = pcall(require, "table.new")
 if not ok or type(table_new) ~= "function" then
-    table_new = function() return {} end
+    table_new = function(narr, nrec) return {} end
 end
 
 local ok, table_clear = pcall(require, "table.clear")

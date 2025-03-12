@@ -4,65 +4,65 @@
 
 ## Requirements
 
-* cjson
+- cjson
 
 ## Usage
 
-* [Base](#Base)
-    * try
-    * noop
-    * once
-* [Array](#Array)
-    * concat
-    * diff
-    * each
-    * every
-    * fill
-    * filter
-    * find
-    * findIndex
-    * from
-    * includes
-    * indexOf
-    * join
-    * lastIndexOf
-    * map
-    * pop
-    * push
-    * reduce
-    * reduceRight
-    * reverse
-    * shift
-    * slice
-    * some
-    * sort
-    * splice
-    * toString
-    * union
-    * unshift
-* [Function](#Function)
-    * apply
-    * bind
-    * call
-* [Object](#Object)
-    * assign
-    * entries
-    * freeze
-    * get
-    * keys
-    * omit
-    * pick
-    * set
-    * values
-* [String](#String)
-    * endsWith
-    * replace
-    * slice
-    * split
-    * startsWith
-    * trim
-    * trimLeft
-    * trimRight
+- [Base](#Base)
+  - try
+  - noop
+  - once
+- [Array](#Array)
+  - concat
+  - diff
+  - each
+  - every
+  - fill
+  - filter
+  - find
+  - findIndex
+  - from
+  - includes
+  - indexOf
+  - join
+  - lastIndexOf
+  - map
+  - pop
+  - push
+  - reduce
+  - reduceRight
+  - reverse
+  - shift
+  - slice
+  - some
+  - sort
+  - splice
+  - toString
+  - union
+  - unshift
+- [Function](#Function)
+  - apply
+  - bind
+  - call
+- [Object](#Object)
+  - assign
+  - entries
+  - freeze
+  - get
+  - keys
+  - omit
+  - pick
+  - set
+  - values
+- [String](#String)
+  - endsWith
+  - replace
+  - slice
+  - split
+  - startsWith
+  - trim
+  - trimLeft
+  - trimRight
 
 #### Base
 
@@ -77,7 +77,7 @@ function get_redis()
     local ok, err = redis:connect("127.0.0.1", 6379)
 
     if ok then
-        return redis 
+        return redis
     else
         return nil, err
     end

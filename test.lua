@@ -10,7 +10,7 @@ _G.utility = require "utility"
 _G.test = function(v1, v2, skip)
     if type(v1) == "table" then v1 = cjson.encode(v1) end
     if type(v2) == "table" then v2 = cjson.encode(v2) end
-    
+
     local ok = skip or pcall(assert, tostring(v1) == tostring(v2))
 
     if not ok then
@@ -26,12 +26,14 @@ local function popen(command, n)
 
     for i = 1, n do
         local file = io.popen(command)
-        result, err = file:read("*a")
-        file:close()
+        if type(file) ~= "nil" then
+            result, err = file:read("*a")
+            file:close()
 
-        if err and err == "Interrupted system call" then
-        else
-            break
+            if err and err == "Interrupted system call" then
+            else
+                break
+            end
         end
     end
 
@@ -51,12 +53,12 @@ while(current <= #files) do
 
     local file = string.sub(files, current, from - 1)
     local name = string.sub(file, index, #file - 4)
-    
+
     print("Test: " .. name)
 
     local ok, fn = pcall(loadfile, file)
     if ok then
-        ok, err = pcall(fn)
+        local ok, err = pcall(fn)
         if not ok then
             print("Failed to execute " .. name)
             print(err)

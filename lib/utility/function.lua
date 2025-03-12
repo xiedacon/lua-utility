@@ -1,11 +1,10 @@
 -- Copyright (c) 2018, xiedacon.
 
 local Array = require "utility.array"
-local Object = require "utility.object"
 
 local ok, table_new = pcall(require, "table.new")
 if not ok or type(table_new) ~= "function" then
-    table_new = function() return {} end
+    table_new = function(narr, nrec) return {} end
 end
 
 local Function = { __type = "utility.function" }

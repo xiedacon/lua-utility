@@ -4,7 +4,7 @@ local cjson = require "cjson.safe"
 
 local ok, table_new = pcall(require, "table.new")
 if not ok or type(table_new) ~= "function" then
-    table_new = function() return {} end
+    table_new = function(narr, nrec) return {} end
 end
 
 local Array = {
@@ -24,7 +24,7 @@ setmetatable(Array, {
         if type(arr) == "nil" or type(arr) == "number" then arr = table_new(arr or Array.default_size, 0) end
         if type(arr) ~= "table" then return nil, "arr should be table" end
         if arr.__type == Array.__type then return arr end
-        
+
         setmetatable(arr, proto)
 
         return arr
@@ -37,12 +37,12 @@ local function parse_from_to(from, to, len)
     if from < 0 then from = 0 end
 
     to = to or len
-    if to < 0 then 
+    if to < 0 then
         to = len + to
     elseif to > len then
         to = len
     end
-    
+
     return from + 1, to
 end
 
@@ -117,7 +117,7 @@ function Array:find(fn)
 end
 
 function Array:findIndex(fn)
-    for i, v in ipairs(self) do 
+    for i, v in ipairs(self) do
         if fn(v, i - 1, self) then
             return i - 1
         end
@@ -133,9 +133,9 @@ function Array.includes(self, v, from)
 end
 
 function Array:indexOf(v, from)
-    from, to = parse_from_to(from, #self, #self)
+    local from, to = parse_from_to(from, #self, #self)
 
-    for i = from, to do 
+    for i = from, to do
         if v == self[i] then
             return i - 1
         end
@@ -163,9 +163,9 @@ function Array:lastIndexOf(v, to)
 end
 
 function Array:map(fn)
-    if type(fn) == "string" then 
+    if type(fn) == "string" then
         local path = fn
-        fn = function (v, i, arr) 
+        fn = function (v, i, arr)
             return v[path]
         end
     end
@@ -240,7 +240,7 @@ end
 function Array:slice(from, to)
     from, to = parse_from_to(from, to, #self)
     if from > to then return Array() end
-    
+
     local total = to - from + 1
     local out = Array(total)
     for i = 1, total do
@@ -268,12 +268,12 @@ end
 function Array:splice(from, count, ...)
     if from == nil then return Array() end
 
-    from, to = parse_from_to(from, #self, #self)
+    local from, to = parse_from_to(from, #self, #self)
     if type(count) == "number" and count >= 0 then
         to = from + count - 1
         if to > #self then to = #self end
     end
-    
+
     local size = #self
     local total = to - from + 1
     local out = Array(total)
