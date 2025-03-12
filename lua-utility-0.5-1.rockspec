@@ -1,8 +1,8 @@
 package = "lua-utility"
-version = "0.4-1"
+version = "0.5-1"
 source = {
    url = "git+https://github.com/xiedacon/lua-utility.git",
-   tag = "v0.4"
+   tag = "v0.5"
 }
 description = {
    summary = "A collection of useful utilities while writing Lua.",
