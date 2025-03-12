@@ -32,7 +32,7 @@ setmetatable(Array, {
 })
 
 local function parse_from_to(from, to, len)
-    from = from or 0
+    local from = from or 0
     if from < 0 then from = len + from end
     if from < 0 then from = 0 end
 
@@ -88,7 +88,7 @@ function Array:every(fn)
 end
 
 function Array:fill(v, from, to)
-    from, to = parse_from_to(from, to, #self)
+    local from, to = parse_from_to(from, to, #self)
     if from > to then return self end
 
     for i = from, to do
@@ -238,7 +238,7 @@ function Array:shift()
 end
 
 function Array:slice(from, to)
-    from, to = parse_from_to(from, to, #self)
+    local from, to = parse_from_to(from, to, #self)
     if from > to then return Array() end
 
     local total = to - from + 1
